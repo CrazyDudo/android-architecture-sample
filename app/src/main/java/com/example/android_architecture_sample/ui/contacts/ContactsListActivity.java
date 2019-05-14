@@ -15,7 +15,7 @@ import android.widget.Toast;
 
 
 import com.example.android_architecture_sample.R;
-import com.example.android_architecture_sample.data.network.ApiManage;
+import com.example.android_architecture_sample.data.network.ApiManager;
 import com.example.android_architecture_sample.data.network.model.ContactsBean;
 import com.example.android_architecture_sample.ui.profile.DetailsActivity;
 import com.example.android_architecture_sample.ui.widget.ToolBar;
@@ -101,7 +101,7 @@ public class ContactsListActivity extends AppCompatActivity {
 
     private void doRequestData() {
         mProgressDialog = ProgressDialog.show(this, "Loading...", "Please wait...", true, false);
-        ApiManage.getInstance()
+        ApiManager.getInstance()
                 .getDataService()
                 .getContactsData()
                 .subscribeOn(Schedulers.io())

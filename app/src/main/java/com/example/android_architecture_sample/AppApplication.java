@@ -2,7 +2,7 @@ package com.example.android_architecture_sample;
 
 import android.app.Application;
 
-
+import cn.jpush.android.api.JPushInterface;
 
 
 public class AppApplication extends Application {
@@ -16,8 +16,8 @@ public class AppApplication extends Application {
     }
 
     private void initJpush() {
-//        JPushInterface.setDebugMode(true);//如果时正式版就改成false
-//        JPushInterface.init(this);
+        JPushInterface.setDebugMode(true);//如果时正式版就改成false
+        JPushInterface.init(this);
     }
 
     public static Application getContext() {

@@ -13,7 +13,7 @@ import rx.Observable;
 public interface JpushApi {
 
     //https://api.jpush.cn/v3/push
-    @Headers({"Content-Type:application/json", "Authorization:Basic NTAxODJlM2RkOTdhM2UyMDI3NGJlMDcxOmM1NWZkMmZlMzVjNDQ5NWMyMWVkM2QyNg=="})
+    @Headers({"Content-Type:application/json", "Authorization:Basic M2UyOTI1OWRiOWM0NDhhNmI4YjNjMTc3OmY5NTA5NTQ4YWRjYWM2ZjhmNDE2MWE3OA=="})
     @POST("push")
     Observable<JpushBean> pushMessage(@Body() HashMap<String, Object> body);
 

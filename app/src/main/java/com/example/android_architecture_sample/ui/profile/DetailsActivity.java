@@ -14,7 +14,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.android_architecture_sample.R;
-import com.example.android_architecture_sample.data.network.ApiManage;
+import com.example.android_architecture_sample.data.network.ApiManager;
 import com.example.android_architecture_sample.data.network.model.ContactsBean;
 import com.example.android_architecture_sample.data.network.model.JpushBean;
 import com.example.android_architecture_sample.ui.widget.GlideCircleWithBorder;
@@ -102,12 +102,12 @@ public class DetailsActivity extends AppCompatActivity {
     private void sendMessage() {
         HashMap<String, Object> body = new HashMap<>();
         HashMap<String, String> notification = new HashMap();
-        notification.put("alert", "Hi,this is a test message");
+        notification.put("alert", "Hi,this is a test message from");
         body.put("platform", "all");
         body.put("audience", "all");
         body.put("notification", notification);
 
-        ApiManage.getInstance()
+        ApiManager.getInstance()
                 .getJpushService()
                 .pushMessage(body)
                 .subscribeOn(Schedulers.io())

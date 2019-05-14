@@ -17,7 +17,7 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class ApiManage {
+public class ApiManager {
     private static final Interceptor REWRITE_CACHE_CONTROL_INTERCEPTOR = new Interceptor() {
         @Override
         public Response intercept(Chain chain) throws IOException {
@@ -41,7 +41,7 @@ public class ApiManage {
     };
 
 
-    public static ApiManage apiManage;
+    public static ApiManager apiManage;
 
     private static File httpCacheDirectory = new File(AppApplication.getContext().getCacheDir(), "switchCache");
     private static int cacheSize = 10 * 1024 * 1024; // 10 MiB
@@ -55,11 +55,11 @@ public class ApiManage {
     public ContactsDataApi contactsDataApi;
     public JpushApi jpushApi;
 
-    public static ApiManage getInstance() {
+    public static ApiManager getInstance() {
         if (apiManage == null) {
-            synchronized (ApiManage.class) {
+            synchronized (ApiManager.class) {
                 if (apiManage == null) {
-                    apiManage = new ApiManage();
+                    apiManage = new ApiManager();
                 }
             }
         }
@@ -68,7 +68,7 @@ public class ApiManage {
 
     public ContactsDataApi getDataService() {
         if (contactsDataApi == null) {
-            synchronized (ApiManage.class) {
+            synchronized (ApiManager.class) {
                 if (contactsDataApi == null) {
                     contactsDataApi = new Retrofit.Builder()
                             .baseUrl(Constant.BASE_URL)
@@ -85,7 +85,7 @@ public class ApiManage {
 
     public JpushApi getJpushService() {
         if (jpushApi == null) {
-            synchronized (ApiManage.class) {
+            synchronized (ApiManager.class) {
                 if (jpushApi == null) {
                     jpushApi = new Retrofit.Builder()
                             .baseUrl(Constant.JPUSH_BASE_URL)
