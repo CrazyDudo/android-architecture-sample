@@ -13,26 +13,26 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-
 import com.example.android_architecture_sample.R;
-import com.example.android_architecture_sample.data.network.ApiManager;
 import com.example.android_architecture_sample.data.network.model.ContactsBean;
+import com.example.android_architecture_sample.di.component.DaggerActivityComponent;
+import com.example.android_architecture_sample.di.module.ActivityModule;
 import com.example.android_architecture_sample.ui.profile.DetailsActivity;
 import com.example.android_architecture_sample.ui.widget.ToolBar;
 
-import java.util.Collections;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
-public class ContactsListActivity extends AppCompatActivity {
-
+public class ContactsListActivity extends AppCompatActivity implements ContactsContract.IView {
     private static final String TAG = "ContactsListActivity";
-    ProgressDialog mProgressDialog;
+
+    @Inject
+    ContactsPresenter presenter;
+
     @BindView(R.id.lv_contact_list)
     ListView lvContactList;
     @BindView(R.id.swipeLayout)
@@ -40,17 +40,23 @@ public class ContactsListActivity extends AppCompatActivity {
     @BindView(R.id.tb)
     ToolBar tb;
     private ContactsListAdapter adapter;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contacts_list);
         ButterKnife.bind(this);
-        initData();
+         DaggerActivityComponent.builder()
+                .activityModule(new ActivityModule())
+                .build()
+                .inject(this);
         initView();
+        initData();
     }
 
     private void initView() {
+        presenter.takeView(this);
         initToolBar();
         initSwipeLayout();
     }
@@ -96,42 +102,8 @@ public class ContactsListActivity extends AppCompatActivity {
 
 
     private void initData() {
-        doRequestData();
-    }
 
-    private void doRequestData() {
-        mProgressDialog = ProgressDialog.show(this, "Loading...", "Please wait...", true, false);
-        ApiManager.getInstance()
-                .getDataService()
-                .getContactsData()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<List<ContactsBean>>() {
-                    @Override
-                    public void onCompleted() {
-                        Log.d(TAG, "onCompleted: ");
-                        mProgressDialog.dismiss();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.d(TAG, "onError: " + e.getMessage());
-                        mProgressDialog.dismiss();
-                        Toast.makeText(ContactsListActivity.this, "network connect error", Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void onNext(List<ContactsBean> contactsBeans) {
-                        mProgressDialog.dismiss();
-                        Log.d(TAG, "onNext: " + contactsBeans.get(0).getEmail());
-
-                        //sort
-                        Collections.sort(contactsBeans);
-                        Collections.reverse(contactsBeans);
-                        initListView(contactsBeans);
-                    }
-
-                });
+        presenter.requestData();
     }
 
 
@@ -151,7 +123,7 @@ public class ContactsListActivity extends AppCompatActivity {
                 intent.putExtra("contact_info", mListData.get(position));
                 startActivity(intent);
 
-             }
+            }
         });
     }
 
@@ -171,4 +143,26 @@ public class ContactsListActivity extends AppCompatActivity {
             }
         }
     };
+
+    @Override
+    public void onLoading() {
+        Log.d(TAG, "onLoading: ");
+        progressDialog = ProgressDialog.show(this, "Loading...", "");
+
+    }
+
+    @Override
+    public void onRequestSuccess(List<ContactsBean> contactsBeans) {
+        progressDialog.dismiss();
+        initListView(contactsBeans);
+        Log.d(TAG, "onRequestSuccess: ");
+    }
+
+    @Override
+    public void onError() {
+        progressDialog.dismiss();
+        Toast.makeText(this, "network error", Toast.LENGTH_SHORT).show();
+        Log.d(TAG, "onError: ");
+    }
+
 }
