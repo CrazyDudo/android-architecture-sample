@@ -48,6 +48,7 @@ public class DetailsActivity extends AppCompatActivity {
     Button btnMessage;
     @BindView(R.id.tb)
     ToolBar tb;
+    private ContactsBean contactsBean;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +75,7 @@ public class DetailsActivity extends AppCompatActivity {
     }
 
     private void initData() {
-        ContactsBean contactsBean = getIntent().getExtras().getParcelable("contact_info");
+        contactsBean = getIntent().getExtras().getParcelable("contact_info");
 
         Glide.with(this).load(contactsBean.getAvatar()).apply(new RequestOptions()
                 .error(this.getResources().getDrawable(R.mipmap.default_img))
@@ -102,7 +103,7 @@ public class DetailsActivity extends AppCompatActivity {
     private void sendMessage() {
         HashMap<String, Object> body = new HashMap<>();
         HashMap<String, String> notification = new HashMap();
-        notification.put("alert", "Hi,this is a test message from");
+        notification.put("alert", "Hi,this is a mvc test message from "+contactsBean.getFirst_name());
         body.put("platform", "all");
         body.put("audience", "all");
         body.put("notification", notification);
