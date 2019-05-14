@@ -1,5 +1,5 @@
 # android-architecture-sample
->a simple example for learning andoid architechture.
+>a simple example for learning android architechture.
 
 screen shot:
 
