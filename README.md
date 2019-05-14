@@ -1,6 +1,12 @@
 # android-architecture-sample
 >a simple example for learning andoid architechture.
 
+screen shot:
+
+![](https://i.imgur.com/Y2d5OQk.png)
+
+![](https://i.imgur.com/CwscbFy.png)
+
 ### samples 
 | Sample | Description |
 | ------------- | ------------- |
