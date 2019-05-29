@@ -3,7 +3,6 @@ package com.example.android_architecture_sample.ui.profile;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -21,7 +20,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class DetailsActivity extends AppCompatActivity implements DetailsContract.IView {
+public class DetailsActivity extends AppCompatActivity implements DetailsContract.View {
     private static final String TAG = "DetailsActivity";
     @BindView(R.id.iv_detail_avatar)
     ImageView ivDetailAvatar;
@@ -39,7 +38,7 @@ public class DetailsActivity extends AppCompatActivity implements DetailsContrac
     Button btnMessage;
     @BindView(R.id.tb)
     ToolBar tb;
-    private DetailsPresenter presenter;
+    private DetailsContract.Presenter presenter;
     private ContactsBean contactsBean;
 
     @Override
@@ -47,7 +46,7 @@ public class DetailsActivity extends AppCompatActivity implements DetailsContrac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
         ButterKnife.bind(this);
-        presenter = new DetailsPresenter(this);
+        new DetailsPresenter(this);
         initData();
         initView();
     }
@@ -59,9 +58,9 @@ public class DetailsActivity extends AppCompatActivity implements DetailsContrac
     private void initToolBar() {
         tb.showTitle(false);
         tb.showLeftlab(true);
-        tb.setBackOnclickListener(new View.OnClickListener() {
+        tb.setBackOnclickListener(new android.view.View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(android.view.View v) {
                 finish();
             }
         });
@@ -85,7 +84,7 @@ public class DetailsActivity extends AppCompatActivity implements DetailsContrac
     }
 
     @OnClick({R.id.tv_name, R.id.btn_message})
-    public void onViewClicked(View view) {
+    public void onViewClicked(android.view.View view) {
         switch (view.getId()) {
             case R.id.btn_message:
                 presenter.sendPushNotification(contactsBean);
@@ -104,5 +103,10 @@ public class DetailsActivity extends AppCompatActivity implements DetailsContrac
     public void onSendFailed() {
         Toast.makeText(this, "Send Failed", Toast.LENGTH_SHORT).show();
 
+    }
+
+    @Override
+    public void setPresenter(DetailsContract.Presenter presenter) {
+        this.presenter = presenter;
     }
 }

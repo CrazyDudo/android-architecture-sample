@@ -12,12 +12,13 @@ import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class DetailsPresenter implements DetailsContract.IPresenter {
+public class DetailsPresenter implements DetailsContract.Presenter {
     private static final String TAG = "DetailsPresenter";
-    private DetailsContract.IView view;
+    private DetailsContract.View view;
 
-    public DetailsPresenter(DetailsContract.IView view) {
+    public DetailsPresenter(DetailsContract.View view) {
         this.view = view;
+        view.setPresenter(this);
     }
 
     @Override
@@ -62,4 +63,8 @@ public class DetailsPresenter implements DetailsContract.IPresenter {
     }
 
 
+    @Override
+    public void start() {
+
+    }
 }

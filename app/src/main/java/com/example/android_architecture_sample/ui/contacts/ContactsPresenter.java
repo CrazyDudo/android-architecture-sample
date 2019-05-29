@@ -13,12 +13,13 @@ import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class ContactsPresenter implements ContactsContract.IPresenter {
-    private ContactsContract.IView view;
+public class ContactsPresenter implements ContactsContract.Presenter {
+    private ContactsContract.View view;
     private static final String TAG = "ContactsPresenter";
 
-    public ContactsPresenter(ContactsContract.IView view) {
+    public ContactsPresenter(ContactsContract.View view) {
         this.view = view;
+        view.setPresenter(this);
     }
 
     @Override
@@ -71,4 +72,8 @@ public class ContactsPresenter implements ContactsContract.IPresenter {
     }
 
 
+    @Override
+    public void start() {
+
+    }
 }

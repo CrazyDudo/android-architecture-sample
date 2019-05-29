@@ -8,7 +8,6 @@ import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -23,7 +22,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ContactsListActivity extends AppCompatActivity implements ContactsContract.IView {
+public class ContactsListActivity extends AppCompatActivity implements ContactsContract.View {
 
     private static final String TAG = "ContactsListActivity";
 
@@ -35,14 +34,15 @@ public class ContactsListActivity extends AppCompatActivity implements ContactsC
     ToolBar tb;
     private ContactsListAdapter adapter;
     private ProgressDialog progressDialog;
-    private ContactsPresenter presenter;
+    private ContactsContract.Presenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contacts_list);
         ButterKnife.bind(this);
-        presenter = new ContactsPresenter(this);
+        //create presenter
+        new ContactsPresenter(this);
         initData();
         initView();
     }
@@ -56,9 +56,9 @@ public class ContactsListActivity extends AppCompatActivity implements ContactsC
         tb.showBackBtn(false);
         tb.showTitle(true);
         tb.showLeftlab(false);
-        tb.setBackOnclickListener(new View.OnClickListener() {
+        tb.setBackOnclickListener(new android.view.View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(android.view.View v) {
                 finish();
             }
         });
@@ -108,7 +108,7 @@ public class ContactsListActivity extends AppCompatActivity implements ContactsC
         lvContactList.setAdapter(adapter);
         lvContactList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> parent, android.view.View view, int position, long id) {
                 Intent intent = new Intent(ContactsListActivity.this, DetailsActivity.class);
                 intent.putExtra("contact_info", mListData.get(position));
                 startActivity(intent);
@@ -155,4 +155,8 @@ public class ContactsListActivity extends AppCompatActivity implements ContactsC
         Log.d(TAG, "onError: ");
     }
 
+    @Override
+    public void setPresenter(ContactsContract.Presenter presenter) {
+        this.presenter = presenter;
+    }
 }
